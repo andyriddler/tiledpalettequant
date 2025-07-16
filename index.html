@@ -26,11 +26,11 @@
     </tr>
     <tr>
       <td><label for="palette_num">Palettes:</label></td>
-      <td><input type="number" id="palette_num" min="1" max="16" step="1" value="8"></td>
+      <td><input type="number" id="palette_num" min="1" max="16" step="1" value="5"></td>
     </tr>
     <tr>
       <td><label for="colors_per_palette">Colors per palette:</label></td>
-      <td><input type="number" id="colors_per_palette" min="2" max="256" step="1" value="4"></td>
+      <td><input type="number" id="colors_per_palette" min="2" max="256" step="1" value="16"></td>
     </tr>
     <tr>
       <td><label for="bits_per_channel">Bits per channel:</label></td>
@@ -46,7 +46,7 @@
     <table>
       <tr>
         <td>
-          <input type="radio" id="unique" name="color_zero" value="unique" checked>
+          <input type="radio" id="unique" name="color_zero" value="unique">
           <label for="unique">unique</label>
         </td>
       </tr>
@@ -65,7 +65,7 @@
       </tr>
       <tr>
         <td>
-          <input type="radio" id="transparent_from_color" name="color_zero" value="transparent_from_color">
+          <input type="radio" id="transparent_from_color" name="color_zero" value="transparent_from_color" checked>
           <label for="transparent_from_color">transparent color:</label>
           <input type="color" id="transparent_color" value="#ff00ff" aria-label="transparent color">
         </td>
@@ -142,5 +142,28 @@
   </div>
   <script type="module" src="script.js"></script>
 </body>
+<script>
+  // Função para obter parâmetros da URL
+  function getUrlParameter(name) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+    const results = regex.exec(window.location.href);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
+  // Obter o valor do parâmetro 'mode' e definir no input
+  const mode = getUrlParameter('mode');
+  if (mode !== null && !isNaN(mode)) {
+    const input = document.getElementById('bits_per_channel');
+    const pal = document.getElementById('palette_num')
+    // Garantir que o valor está entre 2 e 8
+    const value = Math.min(8, Math.max(2, parseInt(mode)));
+    input.value = value;
+    if (value == 3)
+      pal.value = 2;
+  }
+</script>
 
 </html>
